@@ -1,0 +1,76 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  VOTER
+}
+
+enum ElectionStatus {
+  DRAFT
+  OPEN
+  CLOSED
+}
+
+model User {
+  id        String   @id @default(uuid())
+  nin       String   @unique
+  email     String   @unique
+  password  String
+  role      Role     @default(VOTER)
+  votes     Vote[]
+  refreshTokens RefreshToken[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Election {
+  id          String         @id @default(uuid())
+  title       String
+  description String
+  status      ElectionStatus @default(DRAFT)
+  startDate   DateTime
+  endDate     DateTime
+  candidates  Candidate[]
+  votes       Vote[]
+  createdAt   DateTime       @default(now())
+}
+
+model Candidate {
+  id         String   @id @default(uuid())
+  name       String
+  party      String
+  election   Election @relation(fields: [electionId], references: [id])
+  electionId String
+  votes      Vote[]
+}
+
+model Vote {
+  id           String   @id @default(uuid())
+  encryptedVote String
+  voteHash     String   @unique
+  previousHash String?
+  voter        User     @relation(fields: [voterId], references: [id])
+  voterId      String
+  election     Election @relation(fields: [electionId], references: [id])
+  electionId   String
+  candidate    Candidate @relation(fields: [candidateId], references: [id])
+  candidateId  String
+  createdAt    DateTime @default(now())
+
+  @@unique([voterId, electionId])
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
