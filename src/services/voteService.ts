@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
-dotenv.config();
-
+if (process.env.NODE_ENV !== "production") {
+  dotenv.config();
+}
 import prisma from "../config/prisma";
 import crypto from "crypto";
 import { Prisma } from "@prisma/client";
