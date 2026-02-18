@@ -3,6 +3,7 @@ dotenv.config();
 
 import prisma from "../config/prisma";
 import crypto from "crypto";
+import { Prisma } from "@prisma/client";
 
 const encryptVote = (candidateId: string): string => {
   const secret = process.env.VOTE_ENCRYPTION_KEY!;
@@ -87,18 +88,18 @@ export const castVote = async (
   const encryptedVote = encryptVote(candidateId);
 
   // 6. Cast vote in a transaction — all or nothing
-  const vote = await prisma.$transaction(async (tx) => {
-    return await tx.vote.create({
-      data: {
-        voterId,
-        electionId,
-        candidateId,
-        encryptedVote,
-        voteHash,
-        previousHash,
-      },
-    });
+  const vote = await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
+  return await tx.vote.create({
+    data: {
+      voterId,
+      electionId,
+      candidateId,
+      encryptedVote,
+      voteHash,
+      previousHash,
+    },
   });
+});
 
   return {
     message: "Vote cast successfully",
@@ -134,13 +135,13 @@ export const getElectionResults = async (electionId: string) => {
   }
 
   const results = election.candidates
-    .map((candidate) => ({
-      id: candidate.id,
-      name: candidate.name,
-      party: candidate.party,
-      votes: candidate._count.votes,
-    }))
-    .sort((a, b) => b.votes - a.votes);
+  .map((candidate: any) => ({
+    id: candidate.id,
+    name: candidate.name,
+    party: candidate.party,
+    votes: candidate._count.votes,
+  }))
+  .sort((a: any, b: any) => b.votes - a.votes);
 
   const totalVotes = election._count.votes;
   const winner = results[0];
