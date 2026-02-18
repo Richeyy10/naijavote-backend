@@ -9,7 +9,7 @@ import helmet from "helmet";
 import authRoutes from "./routes/authRoutes";
 import electionRoutes from "./routes/electionRoutes";
 import voteRoutes from "./routes/voteRoutes";
-import { globalLimiter } from "./middleware/rateLimiter";
+import { globalLimiter } from "./middlewares/rateLimiter";
 
 const app = express();
 
