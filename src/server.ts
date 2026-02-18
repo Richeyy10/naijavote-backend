@@ -13,9 +13,6 @@ import { globalLimiter } from "./middlewares/rateLimiter";
 
 const app = express();
 
-// Trust Railway's proxy
-app.set("trust proxy", 1);  // 👈 add this line
-
 // Security middleware
 app.use(helmet());
 app.use(globalLimiter);
