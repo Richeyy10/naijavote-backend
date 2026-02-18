@@ -2,6 +2,9 @@
   "name": "naijavote-backend",
   "version": "1.0.0",
   "main": "index.js",
+  "engines": {
+    "node": "20.x"
+  },
   "scripts": {
     "build": "tsc",
     "start": "node dist/server.js",
