@@ -9,9 +9,12 @@ import helmet from "helmet";
 import authRoutes from "./routes/authRoutes";
 import electionRoutes from "./routes/electionRoutes";
 import voteRoutes from "./routes/voteRoutes";
-import { globalLimiter } from "./middlewares/rateLimiter";
+import { globalLimiter } from "./middleware/rateLimiter";
 
 const app = express();
+
+// Trust Railway's proxy
+app.set("trust proxy", 1);  // 👈 add this line
 
 // Security middleware
 app.use(helmet());
