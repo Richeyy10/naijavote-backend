@@ -17,7 +17,10 @@ const app = express();
 app.use(helmet());
 app.use(globalLimiter);
 
-app.use(cors());
+app.use(cors({
+  origin: ['http://localhost:3000', 'https://your-production-frontend-url.vercel.app'],
+  credentials: true
+}));
 app.use(express.json());
 
 // Routes
