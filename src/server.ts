@@ -18,7 +18,7 @@ app.use(helmet());
 app.use(globalLimiter);
 
 app.use(cors({
-  origin: ['http://localhost:3000', 'https://your-production-frontend-url.vercel.app'],
+  origin: ['http://localhost:3000', 'https://naijavote.vercel.app'],
   credentials: true
 }));
 app.use(express.json());
